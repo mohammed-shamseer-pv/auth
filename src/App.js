@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { useEffect,useContext } from "react";
 import './App.css';
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Signup from './components/Signup';
+import { AuthContext, FirebaseContext} from "./store/FbContext";
+import Data from './store/Data'
 
 function App() {
+  const {setUser,setEmail,setPhone} = useContext(AuthContext)
+  const {firebase} = useContext(FirebaseContext)
+  useEffect(()=>{
+    firebase.auth().onAuthStateChanged((user)=>{
+      setUser(user)
+      console.log(user)
+    })
+  })
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+       <Data>
+        <Routes>
+        <Route path="/" element={<Signup />} />
+        <Route path="/login" element={<Login/>}/>
+      
+        <Route path="/home" element={<Home/>}/>
+         
+       
+
+        </Routes>  
+         </Data>
+       
+      
     </div>
   );
 }
